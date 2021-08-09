@@ -5,3 +5,8 @@
 dist
 
 yarn.lock
+
+
+*.py 
+
+.vscode
