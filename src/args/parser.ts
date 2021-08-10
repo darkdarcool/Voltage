@@ -9,70 +9,65 @@ export default function parse():any {
   if (!args[0]) {
     console.log(help)
     Deno.exit(0)
-    return null
   }
-  if (args[0] == "compile" || args[0] == "build") {
+  if (args[0] == "build" || args[0] == "compile") {
+    let file = "";
     if (!args[1]) {
-      const error:types.error = {
-        kind: "Required compiling paths",
-        message: `No compiling paths we're specified`
+      const error: types.error = {
+        kind: "No file found",
+        message: "File property is required"
       }
-      utils.error(error);
-      return null
+      utils.error(error)
     }
-    // deno-lint-ignore prefer-const
-    let files = [];
-    let index = 0;
-    let hasCommand = false;
-    while (true) {
-      index++;
-      if (index >= args.length) break 
-      const file = args[index];
-      if (file.charAt(0) == "-") {
-        hasCommand = true; 
-        break; 
-      }
-      else {
-        files.push(file)
-      }
-    }
-    if (hasCommand) {
-      if (args[index] == "-o" || args[index] == "--output" || args[index] == ">") {
-        if (!args[index + 1]) {
-          const error:types.error = {
-            kind: "Output file specification required",
-            message: "No output specification is required when called"
-          }
-          utils.error(error);
-        }
-        else {
-          const toReturn:types.args = {
-            files: files,
-            outFile: `${args[index + 1]}`
-          }
-          return toReturn;
-        }
-      }
-      // Put other commands after complations here
-    }
-    else {
+    file = args[1];
+    if (!args[2]) {
       const toReturn:types.args = {
-        files: files,
-        outFile: "compiled.py"
+        files: [file],
+        outFile: "out.py",
+        ignoreErr: false
       }
       return toReturn
     }
-  }
-  else if (args[0] == "-h" || args[0] == "--help") {
-    console.log(help)
-    Deno.exit(0)
-    return null
-  }
-  else {
-    const error: types.error = {
-      kind: "Bad option",
-      message: `Command ${args[0]} can't be found`
+    else {
+      if (args[2] == "-o" || args[2] == "--out" || args[2] == ">") {
+        if (!args[3]) {
+          const error: types.error = {
+            kind: "Outfile not found",
+            message: "Out file property is required"
+          }
+          utils.error(error)
+        }
+        if (!args[4]) {
+          const toReturn: types.args = {
+            files: [file],
+            outFile: args[3],
+            ignoreErr: false
+          }
+          return toReturn
+        }
+        if (args[4] == "--ignore-error") {
+          const toReturn: types.args = {
+            files: [file],
+            outFile: args[3],
+            ignoreErr: true
+          }
+          return toReturn
+        }
+        else {
+          const error: types.error = {
+            kind: "Bad option",
+            message: "Arg " + args[4] + " does not exist"
+          }
+          utils.error(error)
+        }
+      }
+      else {
+        const error: types.error = {
+          kind: "Bad option",
+          message: "Arg " + args[2] + " does not exist"
+        }
+        utils.error(error)
+      }
     }
-    utils.error(error);
   }
 }

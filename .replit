@@ -1,2 +1,0 @@
-langauge = "deno"
-run = "deno compile --allow-run --allow-write --allow-read --output dist/main src/*.ts"

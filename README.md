@@ -1,10 +1,13 @@
+<p align = "center">
+  <img src = "./images/logo.png" width = "250" height = "100">
+</p>
+
 # Voltage 
 
 > Python optimizer
 
-<p align = "center">
-<img src = "./images/logo.png" width = "250" height = "100">
-</p>
+
+# Welcome
 
 Welcome to Voltage!
 
@@ -14,26 +17,47 @@ Voltage a _powerful_ python optimizer/compiler that does:
 
 By testing if comments can affect compile time, it was found that they _can_ slow down compile time if there are more than 5 in a program. So we remove single line comments. We do _not_ string multiline comments as they can contain copyright, and important notes
 
-So much more to come! 
+* Adds semicolons to each line 
 
-Voltage is very beta (and JANK), so please don't judge Voltage to harshly and leave issues in discussions or issues for us to fix or change!
+This allows the compiler to easily parse your program faster!
 
-## Installation
+* Rerouting built in functions in different ways to be faster!
 
-Download the latest version of the releases tab. We recommend _not_ installing pre-releases because they may be pretty JANK, and some actions may not work.
+Some functions in python are widly used and are difficult to avoid _not_ using. Voltage takes them and supercharges their speed!
 
-After you download the zip file, unzip it and open it in your terminal. Then run `install` file by running `./install`, and it should install it to your path, and then you can run `voltage` ***whenever***, ***wherever***.
+* So much more to come!
 
-You can also run the `remove` file to delete voltage.
+Voltage is very _beta_ and _jank_, so please wait for featues to be added, and if your feature isn't currently in the process of being made, feel free to request one in the issues!
 
-## Usage 
+# Intro
 
-Run `voltage -h` to see a list of commands!
+Voltage is a that helps you write code in the latest and most modern ways and version of python, by compiling your version of python to the latest ways and techniques!
 
-## Contributing
+### In:
 
-Contributing guide coming soon!
+``` python
+print("Hello, world!\n"); # Note: The \n is needed for the compiled sys!
+```
 
-## Conclusion 
+### Out:
 
-Thank you for looking at Voltage! And we'll se you later!
+```python 
+import sys;
+sys.stdout.write("Hello, world!\n");
+```
+
+
+# Details
+
+### Maintainers:
+
+This is maintained by [@darkdarcool](https://github.com/darkdarcool)
+
+### Help? 
+
+Please open a discussion Q&A for questions about errors or problems.
+
+### Contributing?
+
+We will have a contributing guide soon!
+

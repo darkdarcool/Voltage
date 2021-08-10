@@ -6,4 +6,5 @@ export type error = {
 export type args = {
   files: Array<string>,
   outFile: string,
+  ignoreErr: boolean
 }
