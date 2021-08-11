@@ -1,6 +1,7 @@
 import * as types from '../types/types.ts';
 import * as utils from '../utils/error.ts'; 
 import { help } from './help.ts';
+import { existsSync } from "https://deno.land/std/fs/mod.ts";
 
 const args = Deno.args; // Get args
 // deno-lint-ignore no-explicit-any
@@ -20,6 +21,14 @@ export default function parse():any {
     }
     file = args[1];
     if (!args[2]) {
+      if (existsSync(args[1]) == false) {
+        const error: types.error = {
+          kind: "File not found",
+          message: "File " + args[1] + " is not found"
+        }
+        utils.error(error)
+      }
+      console.log(existsSync(args[1]))
       const toReturn:types.args = {
         files: [file],
         outFile: "out.py",
@@ -37,6 +46,13 @@ export default function parse():any {
           utils.error(error)
         }
         if (!args[4]) {
+          if (existsSync(args[1]) == false) {
+            const error: types.error = {
+              kind: "File not found",
+              message: "File " + args[1] + " is not found"
+            }
+            utils.error(error)
+          }
           const toReturn: types.args = {
             files: [file],
             outFile: args[3],
@@ -45,6 +61,13 @@ export default function parse():any {
           return toReturn
         }
         if (args[4] == "--ignore-error") {
+          if (existsSync(args[1]) == false) {
+            const error: types.error = {
+              kind: "File not found",
+              message: "File " + args[1] + " is not found"
+            }
+            utils.error(error)
+          }
           const toReturn: types.args = {
             files: [file],
             outFile: args[3],
