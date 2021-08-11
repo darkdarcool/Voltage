@@ -1,13 +1,10 @@
 import argparse from './args/parser.ts';
-import removeComments from './comments/comments.ts';
 import * as utils from './utils/error.ts';
 import * as types from './types/types.ts';
 import chalk from 'https://deno.land/x/chalkin@v0.1.3/mod.ts';
-import parse from './parser/parser.ts'
-
+import compile from './compile.ts';
 
 const data = argparse();
-
 let file = "";
 
 if (data['files'] == undefined) {
@@ -48,26 +45,20 @@ if (errContent) {
   Deno.exit(0);
 }
 
-// deno-lint-ignore no-explicit-any
-let commented:any = removeComments(`${file}`);
-commented = parse(commented);
-
-// do whatever to the string
 
 console.log(chalk.blue.bold("[3/3]") + chalk.white.bold(": Writing data..."))
 
-commented = `${commented}`; // Make sure it has strings
-
+let parsed = compile(file)
 // deno-lint-ignore no-regex-spaces
-commented = commented.replace(/  /, ""); // Do not apply global flag, only one should be replaced
-commented = commented.split(/\r?\n/)
+parsed = parsed.replace(/  /, ""); // Do not apply global flag, only one should be replaced
+parsed = parsed.split(/\r?\n/)
 
 // deno-lint-ignore no-explicit-any deno-lint-ignore prefer-const
 let main: Array<any> = [];
-for (let i = 0; i < commented.length; ++i) {
-  let line = `${commented[i]}`
+for (let i = 0; i < parsed.length; ++i) {
+  let line = `${parsed[i]}`
   // console.log(line.charAt(line.length -1 ))
-  if (line.charAt(line.length - 1) != ":") {
+  if (line.charAt(line.length - 1) != ":" || line.includes('import ')) {
     line = line + ";\n"
     main.push(line)
   }
@@ -77,7 +68,6 @@ for (let i = 0; i < commented.length; ++i) {
 }
 main[main.length -1] = ""
 
-// commented = commented.replace(/\r?\n|\r/g, ";\n")
 const uint8array = new TextEncoder().encode(`${main.join('')}`);
 
 Deno.writeFileSync(`${data.outFile}`, uint8array)
@@ -101,9 +91,8 @@ if (errorStr) {
     console.log(chalk.yellow('Operation warn\n\nError found.'));
     console.log(chalk.blue("There is probably a problem with the compiler. Please post your issue in the github repo by finding it with the -h command"))
     if (!Deno.args[5]) {
-
+      // 
     }
-
     else if (Deno.args[5] === "--show-errors") {
       console.log(chalk.yellow.bold(errorStr));
     }
@@ -113,7 +102,7 @@ if (errorStr) {
     console.log(chalk.yellow('Operation warn\n\nError found.'));
     console.log(chalk.blue("There is probably a problem with the compiler. Please post your issue in the github repo by finding it with the -h command"))
     if (!Deno.args[5]) {
-
+      // 
     }
 
     else if (Deno.args[5] === "--show-errors") {

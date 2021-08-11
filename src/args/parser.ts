@@ -3,7 +3,6 @@ import * as utils from '../utils/error.ts';
 import { help } from './help.ts';
 
 const args = Deno.args; // Get args
-
 // deno-lint-ignore no-explicit-any
 export default function parse():any {
   if (!args[0]) {
