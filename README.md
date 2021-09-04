@@ -36,13 +36,14 @@ Voltage is a that helps you write code in the latest and most modern ways and ve
 ### In:
 
 ``` python
-print("Hello, world!\n"); # Note: The \n is needed for the compiled sys!
+print("Hello, world!")
 ```
 
 ### Out:
 
 ```python 
 import sys;
+import os; # THIS COMMENT IS NOT COMPILER GENERATED: It imports os so that your code can have all of the proper modern python code!
 sys.stdout.write("Hello, world!\n");
 ```
 
