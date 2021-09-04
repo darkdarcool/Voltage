@@ -5,6 +5,10 @@ import chalk from 'https://deno.land/x/chalkin@v0.1.3/mod.ts';
 import compile from './compile.ts';
 try {
   const data = argparse();
+  if (data == undefined) {
+    console.log(chalk.red.bold("Arg does not exist"))
+    Deno.exit(0)
+  }
   let file = "";
 
   if (data['files'] == undefined) {
@@ -37,15 +41,14 @@ try {
 
   const errthing = await test.stderrOutput();
   const errContent = new TextDecoder().decode(errthing);
-
+  /*
   if (errContent) {
     // Deno.removeSync(data.outFile);
     console.log(chalk.red('Operation canceled\n\nError found in source file'));
     console.log(chalk.red.bold(errContent));
     Deno.exit(0);
   }
-
-
+  */
   console.log(chalk.blue.bold("[3/3]") + chalk.white.bold(": Writing data..."))
 
   let parsed = compile(file)
@@ -72,7 +75,8 @@ try {
   try {
     Deno.writeFileSync(`${data.outFile}`, uint8array)
   } catch {
-    console.log("sdff")
+    console.log(chalk.red.bold("Error creating file"))
+    Deno.exit(0)
   }
   const cmd = Deno.run({
     cmd: ["python3", data.outFile],
@@ -114,13 +118,6 @@ try {
         console.log(chalk.red.bold(errorStr))
       }
     }
-    /*else {
-      Deno.removeSync(data.outFile);
-      console.log(chalk.red('Operation canceled\n\nError found afer complation'));
-      console.log(chalk.blue("There is probably a problem with the compiler. Please post your issue in the github repo by finding it with the -h command"));
-      if (Deno.args[5] == "--show-all-errors") console.log(chalk.red.bold(errorStr));
-      Deno.exit(0)
-    }*/
   }
   else {
     console.log(chalk.green.bold("Success!") + chalk.white.bold(" Operation passed!"))

@@ -10,6 +10,7 @@ export default function parse():any {
     console.log(help)
     Deno.exit(0)
   }
+  console.log(args)
   if (args[0] == "build" || args[0] == "compile") {
     let file = "";
     if (!args[1]) {
@@ -28,7 +29,7 @@ export default function parse():any {
         }
         utils.error(error)
       }
-      console.log(existsSync(args[1]))
+      // console.log(existsSync(args[1]))
       const toReturn:types.args = {
         files: [file],
         outFile: "out.py",
@@ -37,6 +38,7 @@ export default function parse():any {
       return toReturn
     }
     else {
+      let ignoreErr: boolean = false;
       if (args[2] == "-o" || args[2] == "--out" || args[2] == ">") {
         if (!args[3]) {
           const error: types.error = {
@@ -56,22 +58,7 @@ export default function parse():any {
           const toReturn: types.args = {
             files: [file],
             outFile: args[3],
-            ignoreErr: false
-          }
-          return toReturn
-        }
-        if (args[4] == "--ignore-error") {
-          if (existsSync(args[1]) == false) {
-            const error: types.error = {
-              kind: "File not found",
-              message: "File " + args[1] + " is not found"
-            }
-            utils.error(error)
-          }
-          const toReturn: types.args = {
-            files: [file],
-            outFile: args[3],
-            ignoreErr: true
+            ignoreErr
           }
           return toReturn
         }
@@ -83,12 +70,13 @@ export default function parse():any {
           utils.error(error)
         }
       }
-      else {
-        const error: types.error = {
-          kind: "Bad option",
-          message: "Arg " + args[2] + " does not exist"
+      if (args.includes('--allow-error')) {
+        const toReturn: types.args = {
+          files: [file],
+          outFile: "out.py",
+          ignoreErr: true
         }
-        utils.error(error)
+        return toReturn
       }
     }
   }
